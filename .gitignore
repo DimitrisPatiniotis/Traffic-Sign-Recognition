@@ -1,0 +1,4 @@
+venv/
+Data/Test/
+Data/Train/
+.~lock.*
