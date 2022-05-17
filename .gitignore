@@ -2,3 +2,4 @@ venv/
 Data/Test/
 Data/Train/
 .~lock.*
+__pycache__/

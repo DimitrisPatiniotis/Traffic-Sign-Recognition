@@ -13,6 +13,9 @@ IMG_RSZ_H = 30
 IMG_RSZ_W = 30
 IMG_RSZ_CHNLS = 3
 
+# Setting total number of sign classes
+TOTAL_CLASSES = 43
+
 # Set Random Seed
 def set_seed(num=42):
     np.random.seed(num)
