@@ -57,8 +57,9 @@ class DataLoader():
         self.split_training_data()
         self.one_hot_labels()
 
+    def return_data(self):
+        return self.training_data, self.training_labels, self.test_data, self.test_labels
+
     
 if __name__ == '__main__':
     print('Data Loader Util')
-    # loader = DataLoader(test_size=0.25)
-    # loader.prepare_test_data()

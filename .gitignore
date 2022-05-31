@@ -3,3 +3,4 @@ Data/Test/
 Data/Train/
 .~lock.*
 __pycache__/
+.vscode/
