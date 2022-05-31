@@ -3,8 +3,10 @@ import sys
 sys.path.insert(1, '../Utils/')
 from settings import *
 from label_matching import label_match
+from random import choice
 import matplotlib.pyplot as plt
-# from matplotlib.image import imread
+from matplotlib.image import imread
+import pandas as pd
 
 def visualize_dataset(show=True):
     folders = os.listdir(TRAIN_DIR)
@@ -27,9 +29,22 @@ def visualize_dataset(show=True):
 
     return plt
 
-def print_random_images(show=True):
-    pass
+def print_sample_images(show=True):
+    img_paths = pd.read_csv(CSV_DIR + 'Test.csv')["Path"].values
+    plt.figure(figsize=(25,25))
+
+    for img_number in range(1, 16):
+        plt.subplot(3,5,img_number)
+        random_img_path = CSV_DIR + choice(img_paths)
+        rand_img = imread(random_img_path)
+        plt.imshow(rand_img)
+        plt.grid()
+        plt.xlabel(rand_img.shape[1], fontsize = 10)
+        plt.ylabel(rand_img.shape[0], fontsize = 10)
+    if show == True:
+        plt.show()
+    
+    return plt
 
 if __name__ == '__main__':
     print('Data Visualization')
-    visualize_dataset()
