@@ -29,10 +29,9 @@ def visualize_dataset(show=True):
 
     return plt
 
-def print_sample_images(show=True):
+def display_sample_images(show=True):
     img_paths = pd.read_csv(CSV_DIR + 'Test.csv')["Path"].values
     plt.figure(figsize=(25,25))
-
     for img_number in range(1, 16):
         plt.subplot(3,5,img_number)
         random_img_path = CSV_DIR + choice(img_paths)
@@ -48,3 +47,4 @@ def print_sample_images(show=True):
 
 if __name__ == '__main__':
     print('Data Visualization')
+    display_sample_images()

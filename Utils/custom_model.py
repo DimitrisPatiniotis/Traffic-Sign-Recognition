@@ -23,6 +23,8 @@ class customModel():
     # import model from models.py
     def define_model(self):
         if self.model_id == 1:
+            self.model = model_1()
+        if self.model_id == 2:
             self.model = model_2()
 
     def set_optimizer(self):
