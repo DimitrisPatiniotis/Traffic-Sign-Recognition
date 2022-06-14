@@ -5,17 +5,17 @@ import cv2
 sys.path.insert(1, '../Utils/')
 from settings import *
 from tqdm import tqdm
-from sklearn.model_selection import  train_test_split
+from sklearn.model_selection import train_test_split
 from tensorflow import keras
 from sklearn import preprocessing
 
 class DataLoader():
-    def __init__(self, test_data_dir = TEST_DIR, train_data_dir = TRAIN_DIR, test_size=0.3, training_size=10000, validation_size=10000):
+    def __init__(self, test_data_dir = TEST_DIR, train_data_dir = TRAIN_DIR, test_size=0.3, training_size=10000, reduce_dataset = False):
+        self.reduce_dataset = reduce_dataset
         self.train_data_dir = train_data_dir
         self.test_data_dir = test_data_dir
         self.test_size = test_size
         self.training_size = training_size
-        self.validation_size = validation_size
         self.training_data = np.empty([0])
         self.training_labels = np.empty([0])
         self.test_data = np.empty([0])
@@ -40,19 +40,17 @@ class DataLoader():
         self.training_data =  np.array(self.training_data)
         self.training_labels = np.array(self.training_labels)
 
-
-    def shuffle_training_data(self):
+    def shuffle_training_data(self, ts = False):
         shuffle_indexes = np.arange(self.training_data.shape[0])
         np.random.shuffle(shuffle_indexes)
         self.training_data = self.training_data[shuffle_indexes]
         self.training_labels = self.training_labels[shuffle_indexes]
-
-        self.training_data = self.training_data[:self.training_size]
-        self.training_labels = self.training_labels[:self.training_size]
-        print(self.training_data.shape, self.training_labels.shape)
+        if ts or self.reduce_dataset:
+            self.training_data = self.training_data[:self.training_size]
+            self.training_labels = self.training_labels[:self.training_size]
+            print(self.training_data.shape, self.training_labels.shape)
 
     def split_training_data(self):
-        # Create Split
         X_train, X_test, y_train, y_test = train_test_split(self.training_data, self.training_labels, test_size= self.test_size , random_state=42, shuffle=True)
         self.training_data, self.training_labels, self.test_data, self.test_labels = X_train, y_train, X_test, y_test
     
@@ -67,17 +65,15 @@ class DataLoader():
 
     def prepare_test_for_svm(self):
         self.load_training_data(self)
-        self.shuffle_training_data()
+        self.shuffle_training_data(ts = True)
         self.split_training_data()
         self.training_data.resize(len(self.training_data), IMG_RSZ_H * IMG_RSZ_W * 3)
         self.test_data.resize(len(self.test_data), IMG_RSZ_H * IMG_RSZ_W * 3)
         self.training_data = preprocessing.scale(self.training_data)
         self.test_data = preprocessing.scale(self.test_data)
-
     
     def return_data(self):
         return self.training_data, self.training_labels, self.test_data, self.test_labels
-
     
 if __name__ == '__main__':
     print('Data Loader Util')
