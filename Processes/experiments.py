@@ -37,12 +37,11 @@ def optimizer_experiment(data_loader):
         models.append(curr_model)
     return models
 
-#***
-def loss_experiment(data_loader):
+def training_size_experiment(data_loader):
     tr_data, tr_labels, ts_data, ts_labels = data_loader.return_data()
     models = []
-    for i in [['', 'categorical_crossentropy'], ['', 'Categorical Crossentropy']]:
-        curr_model = customModel(model_id = 1, loss = i[0], name=i[1])
+    for i in [[5000, 10000, 20000]]:
+        curr_model = customModel(model_id = 1, training_size=i, name='Model trained with {} samples'.format(i))
         curr_model.prepare_to_train()
         curr_model.train_model(tr_data, tr_labels, ts_data, ts_labels)
         models.append(curr_model)
