@@ -2,6 +2,7 @@ from operator import mod
 import sys
 sys.path.insert(1, '../Utils/')
 from settings import *
+from run_tests import *
 from label_matching import label_match
 from load_dataset import DataLoader
 from custom_model import customModel
@@ -20,11 +21,12 @@ def svm_experiment():
 def architecture_experiment(data_loader):
     tr_data, tr_labels, ts_data, ts_labels = data_loader.return_data()
     models = []
-    for i in range(1,4):
+    for i in range(1,3):
         curr_model = customModel(model_id = i, name = 'Architecture {}'.format(i))
         curr_model.prepare_to_train()
         curr_model.train_model(tr_data, tr_labels, ts_data, ts_labels)
         models.append(curr_model)
+    test_data_predictions(curr_model.model)
     return models
 
 def optimizer_experiment(data_loader):
@@ -35,16 +37,22 @@ def optimizer_experiment(data_loader):
         curr_model.prepare_to_train()
         curr_model.train_model(tr_data, tr_labels, ts_data, ts_labels)
         models.append(curr_model)
+        test_data_predictions(curr_model.model)
     return models
 
-def training_size_experiment(data_loader):
-    tr_data, tr_labels, ts_data, ts_labels = data_loader.return_data()
+def training_size_experiment():
+
     models = []
-    for i in [[5000, 10000, 20000]]:
-        curr_model = customModel(model_id = 1, training_size=i, name='Model trained with {} samples'.format(i))
+    for i in [5000, 10000, 20000]:
+        data_loader = DataLoader(reduce_dataset = True, training_size=i)
+        data_loader.prepare_test_data()
+        tr_data, tr_labels, ts_data, ts_labels = data_loader.return_data()
+        curr_model = customModel(model_id = 1, name='Model trained with {} samples'.format(i), epochs=20, callback = 'early_stopping', model_patience=4)
         curr_model.prepare_to_train()
         curr_model.train_model(tr_data, tr_labels, ts_data, ts_labels)
         models.append(curr_model)
+        print(curr_model.name)
+        test_data_predictions(curr_model.model)
     return models
 
 def get_best_model(data_loader):
@@ -53,14 +61,17 @@ def get_best_model(data_loader):
     model.prepare_to_train()
     model.train_model(tr_data, tr_labels, ts_data, ts_labels)
     model.graph_history_accuracy()
+    test_data_predictions(curr_model.model)
     return model
 
 def main():
-    svm_experiment()
-    data_loader = DataLoader(reduce_dataset = True)
+    data_loader = DataLoader()
     data_loader.prepare_test_data()
+    svm_experiment()
+    architecture_experiment(loader)
     optimizer_experiment(data_loader)
+    training_size_experiment()
+    get_best_model(data_loader)
 
 if __name__ == '__main__':
-    print('Create Model Module')
     main()

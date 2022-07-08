@@ -4,7 +4,7 @@ import numpy as np
 # Path Settings
 BASE_DIR = '../'
 META_DIR = BASE_DIR + 'Data/Meta/'
-TEST_DIR = BASE_DIR + 'Data/Test/'
+TEST_DIR = BASE_DIR + 'Data/'
 TRAIN_DIR = BASE_DIR + 'Data/Train/'
 CSV_DIR = BASE_DIR + 'Data/'
 

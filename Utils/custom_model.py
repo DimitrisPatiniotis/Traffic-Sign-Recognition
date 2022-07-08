@@ -33,8 +33,6 @@ class customModel():
             self.model = model_1()
         if self.model_id == 2:
             self.model = model_2()
-        if self.model_id == 3:
-            self.model = model_3()
 
     def set_optimizer(self):
         if self.optimizer_name == 'Adam':
